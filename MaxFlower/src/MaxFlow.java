@@ -1,7 +1,5 @@
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implements the Ford-Fulkerson algorithm with BFS to find maximum flow.
@@ -31,7 +29,12 @@ public class MaxFlow {
             int pathFlow = Integer.MAX_VALUE;
             for (int v = sink; v != source; v = parent[v]) {
                 int u = parent[v];
-                pathFlow = Math.min(pathFlow, graph.getResidualCapacity(u, v));
+                for (Edge edge : graph.getEdges(u)) {
+                    if (edge.to == v) {
+                        pathFlow = Math.min(pathFlow, edge.capacity);
+                        break;
+                    }
+                }
             }
 
             // Print the path
@@ -45,9 +48,17 @@ public class MaxFlow {
             // Update flow along the path
             for (int v = sink; v != source; v = parent[v]) {
                 int u = parent[v];
-                graph.setFlow(u, v, graph.getFlow(u, v) + pathFlow);
-                if (graph.getFlow(v, u) > 0) {
-                    graph.setFlow(v, u, graph.getFlow(v, u) - pathFlow);
+                for (Edge edge : graph.getEdges(u)) {
+                    if (edge.to == v) {
+                        edge.capacity -= pathFlow; // Reduce capacity in forward edge
+                        break;
+                    }
+                }
+                for (Edge edge : graph.getEdges(v)) {
+                    if (edge.to == u) {
+                        edge.capacity += pathFlow; // Increase capacity in reverse edge
+                        break;
+                    }
                 }
             }
 
@@ -69,27 +80,29 @@ public class MaxFlow {
         while (!queue.isEmpty()) {
             int u = queue.poll();
 
-            for (int v = 0; v < numNodes; v++) {
-                if (!visited[v] && graph.getResidualCapacity(u, v) > 0) {
+            for (Edge edge : graph.getEdges(u)) {
+                int v = edge.to;
+                if (!visited[v] && edge.capacity > 0) {
                     queue.add(v);
                     parent[v] = u;
                     visited[v] = true;
+
+                    if (v == sink) {
+                        return true; // Found a path to the sink
+                    }
                 }
             }
         }
 
-        return visited[sink];
+        return false;
     }
 
     public static void printFlowDetails(Graph graph) {
         System.out.println("\nFinal Flow Details:");
 
         for (int i = 0; i < graph.getNumNodes(); i++) {
-            for (int j = 0; j < graph.getNumNodes(); j++) {
-                if (graph.getCapacity(i, j) > 0) {
-                    System.out.println("Edge " + i + " -> " + j + ": Flow = " +
-                            graph.getFlow(i, j) + " / " + graph.getCapacity(i, j));
-                }
+            for (Edge edge : graph.getEdges(i)) {
+                System.out.println("Edge " + i + " -> " + edge.to + ": Remaining Capacity = " + edge.capacity);
             }
         }
     }

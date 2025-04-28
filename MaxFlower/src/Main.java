@@ -1,21 +1,42 @@
-import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Main class for the Network Flow algorithm implementation.
- * Student ID: [Your Student ID]
- * Name: [Your Name]
+ * Student ID: 20230159/w2053174
+ * Name: Thushan Madarasinghe
  */
 public class Main {
 
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Usage: java Main <input_file>");
+        Scanner scanner = new Scanner(System.in);
+
+        // Ask the user to choose between "ladder" or "bridge"
+        System.out.println("Enter the type of file you want to use (ladder or bridge):");
+        String fileType = scanner.next().toLowerCase();
+
+        // Validate the file type
+        if (!fileType.equals("ladder") && !fileType.equals("bridge")) {
+            System.out.println("Invalid file type. Please enter 'ladder' or 'bridge'.");
             return;
         }
 
-        String filename = args[0];
+        // Prompt the user to select a file number
+        System.out.println("Enter a number between 1 and 20 to select a " + fileType + " file:");
+        int choice = scanner.nextInt();
+
+        // Validate the input
+        if (choice < 1 || choice > 20) {
+            System.out.println("Invalid choice. Please enter a number between 1 and 20.");
+            return;
+        }
+
+        // Construct the file path based on the user's choice
+        String filename = "benchmarks/" + fileType + "_" + choice + ".txt";
 
         try {
+            // Start measuring execution time
+            long startTime = System.nanoTime();
+
             // Parse the input file
             System.out.println("Parsing input file: " + filename);
             Graph graph = Parser.parseFile(filename);
@@ -28,9 +49,13 @@ public class Main {
             int maxFlow = MaxFlow.findMaxFlow(graph);
             System.out.println("\nMaximum flow value: " + maxFlow);
 
-            // Print detailed flow information
-            MaxFlow.printFlowDetails(graph);
+            // Stop measuring execution time
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1_000_000; // Convert to milliseconds
+            System.out.println("\nExecution time: " + duration + " ms");
 
+        } catch (OutOfMemoryError e) {
+            System.out.println("Error: The program ran out of memory. Try increasing the heap size or using a smaller file.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
