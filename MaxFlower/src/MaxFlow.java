@@ -2,9 +2,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Implements the Ford-Fulkerson algorithm with BFS to find maximum flow.
- * Student ID: [Your Student ID]
- * Name: [Your Name]
+ * Main class for the Network Flow algorithm implementation.
+ * Student ID: 20230159/w2053174
+ * Name: Thushan Madarasinghe
  */
 public class MaxFlow {
 

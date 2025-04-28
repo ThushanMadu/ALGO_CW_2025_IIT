@@ -1,3 +1,8 @@
+/**
+ * Main class for the Network Flow algorithm implementation.
+ * Student ID: 20230159/w2053174
+ * Name: Thushan Madarasinghe
+ */
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
