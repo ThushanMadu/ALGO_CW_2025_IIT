@@ -38,19 +38,20 @@ public class Graph {
         }
         return sb.toString();
     }
+
+    static class Edge {
+        int to;
+        int capacity;
+
+        public Edge(int to, int capacity) {
+            this.to = to;
+            this.capacity = capacity;
+        }
+
+        @Override
+        public String toString() {
+            return "(" + to + ", " + capacity + ")";
+        }
+    }
 }
 
-class Edge {
-    int to;
-    int capacity;
-
-    public Edge(int to, int capacity) {
-        this.to = to;
-        this.capacity = capacity;
-    }
-
-    @Override
-    public String toString() {
-        return "(" + to + ", " + capacity + ")";
-    }
-}

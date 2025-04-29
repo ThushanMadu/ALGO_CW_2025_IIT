@@ -24,6 +24,14 @@ public class Main {
         System.out.println("Enter a number between 1 and 20 to select a " + fileType + " file:");
         int choice = scanner.nextInt();
 
+
+
+        /* For the Submission I only add 5 files for testing in benchmarks folder
+         * in case of viva i will add other bridge text files and ladder files for Testing.
+        */
+
+
+
         // Validate the input
         if (choice < 1 || choice > 20) {
             System.out.println("Invalid choice. Please enter a number between 1 and 20.");

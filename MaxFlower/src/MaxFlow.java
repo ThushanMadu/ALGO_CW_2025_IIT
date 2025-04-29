@@ -29,7 +29,7 @@ public class MaxFlow {
             int pathFlow = Integer.MAX_VALUE;
             for (int v = sink; v != source; v = parent[v]) {
                 int u = parent[v];
-                for (Edge edge : graph.getEdges(u)) {
+                for (Graph.Edge edge : graph.getEdges(u)) {
                     if (edge.to == v) {
                         pathFlow = Math.min(pathFlow, edge.capacity);
                         break;
@@ -48,13 +48,13 @@ public class MaxFlow {
             // Update flow along the path
             for (int v = sink; v != source; v = parent[v]) {
                 int u = parent[v];
-                for (Edge edge : graph.getEdges(u)) {
+                for (Graph.Edge edge : graph.getEdges(u)) {
                     if (edge.to == v) {
                         edge.capacity -= pathFlow; // Reduce capacity in forward edge
                         break;
                     }
                 }
-                for (Edge edge : graph.getEdges(v)) {
+                for (Graph.Edge edge : graph.getEdges(v)) {
                     if (edge.to == u) {
                         edge.capacity += pathFlow; // Increase capacity in reverse edge
                         break;
@@ -66,6 +66,7 @@ public class MaxFlow {
         }
 
         System.out.println("Total augmenting paths found: " + pathCount);
+
         return maxFlow;
     }
 
@@ -80,7 +81,7 @@ public class MaxFlow {
         while (!queue.isEmpty()) {
             int u = queue.poll();
 
-            for (Edge edge : graph.getEdges(u)) {
+            for (Graph.Edge edge : graph.getEdges(u)) {
                 int v = edge.to;
                 if (!visited[v] && edge.capacity > 0) {
                     queue.add(v);
@@ -95,15 +96,5 @@ public class MaxFlow {
         }
 
         return false;
-    }
-
-    public static void printFlowDetails(Graph graph) {
-        System.out.println("\nFinal Flow Details:");
-
-        for (int i = 0; i < graph.getNumNodes(); i++) {
-            for (Edge edge : graph.getEdges(i)) {
-                System.out.println("Edge " + i + " -> " + edge.to + ": Remaining Capacity = " + edge.capacity);
-            }
-        }
     }
 }
